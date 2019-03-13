@@ -1,4 +1,4 @@
-package ua.com.juja.sqlcmd;
+package ua.com.juja.sqlcmd.model;
 
 import java.sql.*;
 import java.util.Random;
@@ -11,17 +11,17 @@ public class Main {
         Class.forName("org.postgresql.Driver");
         Connection connection = DriverManager.getConnection(
                     "jdbc:postgresql://localhost:5432/sqlcmd", "postgres",
-                    "admin");
+                    "postgres");
 
         // insert
         Statement stmt = connection.createStatement();
-        stmt.executeUpdate("INSERT INTO users (name, password)" +
+        stmt.executeUpdate("INSERT INTO public.user (name, password)" +
                 "VALUES ('Stiven', 'Pupkin')");
         stmt.close();
 
         // select
         stmt = connection.createStatement();
-        ResultSet rs = stmt.executeQuery("SELECT * FROM users WHERE id > 10");
+        ResultSet rs = stmt.executeQuery("SELECT * FROM public.user WHERE id > 10");
         while (rs.next()) {
             System.out.println("id:" + rs.getString("id"));
             System.out.println("name:" + rs.getString("name"));
@@ -42,13 +42,13 @@ public class Main {
 
         // delete
         stmt = connection.createStatement();
-        stmt.executeUpdate("DELETE FROM users " +
+        stmt.executeUpdate("DELETE FROM public.user " +
                 "WHERE id > 10 AND id < 100");
         stmt.close();
 
         // update
         PreparedStatement ps = connection.prepareStatement(
-                "UPDATE users SET password = ? WHERE id > 3");
+                "UPDATE public.user SET password = ? WHERE id > 3");
         String pass = "password_" + new Random().nextInt();
         ps.setString(1, pass);
         ps.executeUpdate();
