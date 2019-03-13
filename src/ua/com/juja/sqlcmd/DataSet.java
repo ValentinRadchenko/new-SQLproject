@@ -37,9 +37,13 @@ public class DataSet {
         Object[] result = new Object[index];
         for (int i = 0; i < index; i++) {
             result[i] = data[i].getValue();
+            System.out.println("Test");
         }
         return result;
     }
+
+
+
 
     public String[] getNames() {
         String[] result = new String[index];
