@@ -18,7 +18,7 @@ public abstract class DatabaseManagerTest {
     @Before
     public void setup() {
         manager = getDatabaseManager();
-        manager.connect("sqlcmd", "admin", "postgres");
+        manager.connect("sqlcmd", "postgres", "admin");
     }
 
     public abstract DatabaseManager getDatabaseManager();
@@ -26,7 +26,7 @@ public abstract class DatabaseManagerTest {
     @Test
     public void testGetAllTableNames() {
         String[] tableNames = manager.getTableNames();
-        assertEquals("[user]", Arrays.toString(tableNames));
+        assertEquals("[test, user]", Arrays.toString(tableNames));
     }
 
     @Test
@@ -36,9 +36,9 @@ public abstract class DatabaseManagerTest {
 
         // when
         DataSet input = new DataSet();
+        input.put("id", 13);
         input.put("name", "Stiven");
         input.put("password", "pass");
-        input.put("id", 13);
         manager.create("user", input);
 
         // then
@@ -46,8 +46,8 @@ public abstract class DatabaseManagerTest {
         assertEquals(1, users.length);
 
         DataSet user = users[0];
-        assertEquals("[name, password, id]", Arrays.toString(user.getNames()));
-        assertEquals("[Stiven, pass, 13]", Arrays.toString(user.getValues()));
+        assertEquals("[id, name, password]", Arrays.toString(user.getNames()));
+        assertEquals("[13, Stiven, pass]", Arrays.toString(user.getValues()));
     }
 
     @Test
@@ -56,9 +56,9 @@ public abstract class DatabaseManagerTest {
         manager.clear("user");
 
         DataSet input = new DataSet();
+        input.put("id", 13);
         input.put("name", "Stiven");
         input.put("password", "pass");
-        input.put("id", 13);
         manager.create("user", input);
 
         // when
@@ -72,8 +72,8 @@ public abstract class DatabaseManagerTest {
         assertEquals(1, users.length);
 
         DataSet user = users[0];
-        assertEquals("[name, password, id]", Arrays.toString(user.getNames()));
-        assertEquals("[Pup, pass2, 13]", Arrays.toString(user.getValues()));
+        assertEquals("[id, name, password]", Arrays.toString(user.getNames()));
+        assertEquals("[13, Pup, pass2]", Arrays.toString(user.getValues()));
     }
 
     @Test
@@ -85,6 +85,6 @@ public abstract class DatabaseManagerTest {
         String[] columnNames = manager.getTableColumns("user");
 
         // then
-        assertEquals("[name, password, id]", Arrays.toString(columnNames));
+        assertEquals("[id, name, password]", Arrays.toString(columnNames));
     }
 }
