@@ -18,7 +18,7 @@ public abstract class DatabaseManagerTest {
     @Before
     public void setup() {
         manager = getDatabaseManager();
-        manager.connect("sqlcmd", "postgres", "postgres");
+        manager.connect("sqlcmd", "admin", "postgres");
     }
 
     public abstract DatabaseManager getDatabaseManager();
