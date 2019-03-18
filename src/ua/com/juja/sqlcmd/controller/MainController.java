@@ -1,9 +1,6 @@
 package ua.com.juja.sqlcmd.controller;
 
-import ua.com.juja.sqlcmd.controller.command.Command;
-import ua.com.juja.sqlcmd.controller.command.Exit;
-import ua.com.juja.sqlcmd.controller.command.Help;
-import ua.com.juja.sqlcmd.controller.command.List;
+import ua.com.juja.sqlcmd.controller.command.*;
 import ua.com.juja.sqlcmd.model.DataSet;
 import ua.com.juja.sqlcmd.model.DatabaseManager;
 import ua.com.juja.sqlcmd.view.View;
@@ -21,7 +18,7 @@ public class MainController {
 
     public MainController(View view, DatabaseManager manager) {
       
-        this.commands=new Command[]{new Exit(view),new Help( view ),new List(manager,view)};
+        this.commands=new Command[]{new Exit(view),new Help( view ),new List(manager,view),new Find(manager,view),new Unsupported(view)};
         this.view = view;
         this.manager = manager;
     }
@@ -31,61 +28,21 @@ public class MainController {
 
         while (true) {
             view.write("Введи команду (или help для помощи):");
-            String command = view.read();
+            String input = view.read();
 
-            
+          for(Command command:commands) {
 
+              command.canProcess(input);
+              command.process( input );
 
-            if (commands[2].canProcess( command )) {
-                commands[2].process( command );
-            } else if (commands[1].canProcess( command )) {
-                commands[1].process( command );
+              }
+          }
 
-            } else if (commands[0].canProcess( command )) {
-                commands[0].process( command );
-            } else if (command.startsWith("find|")) {
-                doFind(command);
-            } else {
-                view.write("Несуществующая команда: " + command);
-            }
-        }
     }
 
-    private void doFind(String command) {
-        String[] data = command.split("\\|");
-        String tableName = data[1];
 
-        String[] tableColumns = manager.getTableColumns(tableName);
-        printHeader(tableColumns);
 
-        DataSet[] tableData = manager.getTableData(tableName);
-        printTable(tableData);
-    }
 
-    private void printTable(DataSet[] tableData) {
-        for (DataSet row : tableData) {
-            printRow(row);
-        }
-    }
-
-    private void printRow(DataSet row) {
-        Object[] values = row.getValues();
-        String result = "|";
-        for (Object value : values) {
-            result += value + "|";
-        }
-        view.write(result);
-    }
-
-    private void printHeader(String[] tableColumns) {
-        String result = "|";
-        for (String name : tableColumns) {
-            result += name + "|";
-        }
-        view.write("--------------------");
-        view.write(result);
-        view.write("--------------------");
-    }
 
 
 
