@@ -65,13 +65,13 @@ public class DataSet {
     }
 
     public void updateFrom(DataSet newValue) {
-        for (int index = 0; index < newValue.freeIndex; index++) {
+        for (int index = 0; index < newValue.freeIndex; index++){
             Data data = newValue.data[index];
             this.put(data.name, data.value);
         }
     }
 
-//    public void updateFrom(DataSet newValue) {
+//    public void updateFrom(DataSet newValue){
 //        String[] names = newValue.getNames();
 //        for (int index = 0; index < names.length; index++) {
 //            String name = names[index];
