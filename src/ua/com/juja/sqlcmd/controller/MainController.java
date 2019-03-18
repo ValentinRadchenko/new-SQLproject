@@ -17,8 +17,8 @@ public class MainController {
     private DatabaseManager manager;
 
     public MainController(View view, DatabaseManager manager) {
-      
-        this.commands=new Command[]{new Exit(view),new Help( view ),new List(manager,view),new Find(manager,view),new Unsupported(view)};
+
+        this.commands = new Command[]{new Exit( view ), new Help( view ), new List( manager, view ), new Find( manager, view ), new Unsupported( view )};
         this.view = view;
         this.manager = manager;
     }
@@ -27,26 +27,20 @@ public class MainController {
         connectToDb();
 
         while (true) {
-            view.write("Введи команду (или help для помощи):");
+            view.write( "Введи команду (или help для помощи):" );
             String input = view.read();
 
-          for(Command command:commands) {
+            for (Command command : commands) {
 
-              command.canProcess(input);
-              command.process( input );
 
-              }
-          }
+                if(command.canProcess( input )) {
+                    command.process( input );
+                    break;
+                }
+            }
+        }
 
     }
-
-
-
-
-
-
-
-
 
     private void connectToDb() {
         view.write("Привет юзер!");

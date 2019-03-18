@@ -13,11 +13,13 @@ public class Unsupported implements Command {
 
     @Override
     public boolean canProcess(String command) {
-        return false;
+        return true;
     }
 
     @Override
     public void process(String command) {
+     view.write( "Несуществующая команда!"+ command );
+
 
     }
 }
