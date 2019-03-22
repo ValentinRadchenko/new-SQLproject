@@ -20,36 +20,41 @@ public class MainController {
 
         this.commands = new Command[]{
                 new Connect(manager, view),
-               new Exit( view )
-                , new Help( view )
-               , new isConnected(manager,view)
-                , new List( manager, view )
-                , new Find( manager, view ),
+                new Exit( view )
+               ,new Help( view )
+               ,new isConnected(manager,view)
+               ,new List( manager, view )
+               ,new Find( manager, view ),
                 new Unsupported( view )};
-        this.view = view;
+       this.view = view;
+   }
+    public void run() {
+        try {
+            doWork();
+            return;
+        } catch (ExitException e) {
+            //jkjklj
+        }
 
     }
 
-    public void run() {
-        view.write("Привет юзер!");
-          view.write("Введи, пожалуйста имя базы данных, имя пользователя и пароль в формате: connect|database|userName|password");
+    private void doWork() {
+        view.write( "Привет юзер!" );
+        view.write( "Введи, пожалуйста имя базы данных, имя пользователя и пароль в формате: connect|database|userName|password" );
 
 
         while (true) {
             String input = view.read();
-            if(input==null){
-              new Exit(view).process(input);
+            if (input == null) {
+                new Exit( view ).process( input );
             }
-             for (Command command : commands) {
-               if(command.canProcess( input )) {
+            for (Command command : commands) {
+                if (command.canProcess( input )) {
                     command.process( input );
                     break;
                 }
             }
             view.write( "Введи команду (или help для помощи):" );
         }
-
     }
-
-
 }
