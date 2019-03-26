@@ -24,4 +24,6 @@ public class Console implements View {
             return null;
         }
     }
+
+
 }
