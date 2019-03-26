@@ -23,7 +23,9 @@ public class MainController {
                 new Exit( view )
                ,new Help( view )
                ,new isConnected(manager,view)
-               ,new List( manager, view )
+                ,new Clear( manager, view )
+                ,new Create( manager, view )
+                ,new List( manager, view )
                ,new Find( manager, view ),
                 new Unsupported( view )};
        this.view = view;

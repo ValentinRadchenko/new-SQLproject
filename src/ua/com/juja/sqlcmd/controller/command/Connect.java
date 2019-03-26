@@ -27,7 +27,7 @@ public class Connect implements Command {
                     String string = command;
                     String[] data = string.split("\\|");
                     if (data.length != count()) {
-                        throw new IllegalArgumentException(String.format("Неверно количество параметров разделенных знаком '|', ожидается %S, но есть %S: " + count(),data.length));
+                        throw new IllegalArgumentException(String.format("Неверно количество параметров разделенных знаком '|', ожидается %s но есть: %s", count(),data.length));
                     }
                     String databaseName = data[1];
                     String userName = data[2];

@@ -6,6 +6,8 @@ import org.junit.Test;
 
 
 import ua.com.juja.sqlcmd.controller.Main;
+import ua.com.juja.sqlcmd.model.DataSet;
+import ua.com.juja.sqlcmd.model.JDBCDatabaseManager;
 
 import java.io.*;
 import java.sql.SQLException;
@@ -16,11 +18,13 @@ public class integrationTest {
 
     private ConfigurableInputStream in;
     private  ByteArrayOutputStream out;
+    private JDBCDatabaseManager databasemanager;
 
 
     @Before
     public  void setup() {
 
+        databasemanager=new JDBCDatabaseManager();
         in = new ConfigurableInputStream();
         out = new ByteArrayOutputStream();
 
@@ -64,6 +68,10 @@ public class integrationTest {
                 "\t\tдля получения списка всех таблиц базы, к которой подключились\r\n" +
                 "\tfind|tableName\r\n" +
                 "\t\tдля получения содержимого таблицы 'tableName'\r\n" +
+               "\tclear|tableName\r\n" +
+                        "\t\tдля очистки содержимого таблицы 'tableName'\r\n" +
+                        "\tcreate|tableName|column1|value1|....columnN|valueN\r\n" +
+                        "\t\tдля создания записи в 'tableName'\r\n"+
                 "\thelp\r\n" +
                 "\t\tдля вывода этого списка на экран\r\n" +
                 "\texit\r\n" +
@@ -199,6 +207,9 @@ public class integrationTest {
     @Test
     public void testFindAfterConnect() throws SQLException, ClassNotFoundException {
 
+
+
+
         in.add( "connect|sqlcmd|postgres|admin" );
         in.add( "find|user" );
         in.add( "exit" );
@@ -213,11 +224,73 @@ public class integrationTest {
                 "--------------------\r\n" +
                 "|id|name|password|\r\n" +
                 "--------------------\r\n" +
-                "|70|Stiven|Pupkin|\r\n" +
+               "|15|stiven|12313|\r\n"+
                 "Введи команду (или help для помощи):\r\n"+
                 "До скорой встречи!\r\n", getData() );
 
     }
 
+
+    @Test
+    public void testConnectwithError() throws SQLException, ClassNotFoundException {
+
+
+        in.add( "connect|sqlcmd" );
+        in.add( "exit" );
+
+
+        Main.main(new String[0] );
+
+
+        assertEquals( "Привет юзер!\r\n" +
+                "Введи, пожалуйста имя базы данных, имя пользователя и пароль в формате: connect|database|userName|password\r\n" +
+                "Неудача! по причине: Неверно количество параметров разделенных знаком '|', ожидается 4 но есть: 2\r\n" +
+                "Повтори попытку.\r\n" +
+                        "Введи команду (или help для помощи):\r\n"+
+                "До скорой встречи!\r\n", getData() );
+
+    }
+
+    @Test
+    public void testCreateTableConnect() throws SQLException, ClassNotFoundException {
+//
+//         databasemanager.connect( "sqlcmd","postgres","admin" );
+//         databasemanager.clear( "user" );
+//
+//       DataSet user=new DataSet();
+//       user.put( "id", 13 );
+//        user.put( "name", "Vavava" );
+//        user.put( "password", "******");
+//             databasemanager.create( "user",user );
+
+
+
+
+         in.add( "connect|sqlcmd|postgres|admin" );
+         in.add( "clear|user" );
+         in.add( "create|user|id|15|name|stiven|password|12313" );
+          in.add("find|user");
+         in.add( "exit" );
+
+        Main.main(new String[0] );
+
+
+        assertEquals( "Привет юзер!\r\n" +
+                "Введи, пожалуйста имя базы данных, имя пользователя и пароль в формате: connect|database|userName|password\r\n" +
+                "Успех!\r\n" +
+                "Введи команду (или help для помощи):\r\n" +
+                "Таблица очищена!\r\n" +
+                "Введи команду (или help для помощи):\r\n" +
+                "Таблица user создана успешно names:[id, name, password]\n" +
+                  "values:[15, stiven, 12313]\r\n"+
+                "Введи команду (или help для помощи):\r\n"+
+                "--------------------\r\n" +
+                        "|id|name|password|\r\n" +
+                        "--------------------\r\n" +
+                        "|15|stiven|12313|\r\n" +
+                        "Введи команду (или help для помощи):\r\n"+
+                "До скорой встречи!\r\n", getData() );
+
+    }
 }
 

@@ -32,6 +32,12 @@ public class Help implements Command {
             view.write("\tfind|tableName");
             view.write("\t\tдля получения содержимого таблицы 'tableName'");
 
+             view.write("\tclear|tableName");
+            view.write("\t\tдля очистки содержимого таблицы 'tableName'");
+
+             view.write("\tcreate|tableName|column1|value1|....columnN|valueN");
+             view.write("\t\tдля создания записи в 'tableName'");
+
             view.write("\thelp");
             view.write("\t\tдля вывода этого списка на экран");
 
