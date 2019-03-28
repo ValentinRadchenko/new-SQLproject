@@ -25,6 +25,10 @@ public class Clear implements Command {
     public void process(String command) {
 
         String[]data= command.split( "\\|" );
+
+        if(data.length!=2){
+            throw new IllegalArgumentException( "Введено нверное количество параметров");
+        }
         manager.clear(data[1]);
  view.write( "Таблица очищена!" );
 
